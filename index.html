@@ -13,27 +13,94 @@
         padding:   0;
         font-family: 'Noto Sans JP';
         text-align:  center;
-        font-size:   1.5em;
+        font-size:   8.5vw;
         background:  #235;
         color:       #FFF;
       }      
       img{
-        width:5em;
+        width:3em;
         filter: drop-shadow(0em 0em 0.2em #FFF);
+      }
+      p{
+        margin:  0;
+        padding: 0;
+      }
+      div.area{
+        font-weight: 700;
+        margin-right:1em;
+      }
+      span[id$="day"]{
+        width:2.5em;
+        text-align:right;
+      }
+      span[id$="max"]{
+        font-weight: 600;
+        color      : #F96;
+      }
+      span[id$="min"]{
+        font-weight: 600;
+        color      : #69F;
+      }
+      .weather{
+        display:flex;
+        max-width:90vw;
+        margin: .5em 5vw .2em 5vw;
+      }
+      .dayWether{
+        display:flex;
+      }
+      
+      .tmp{
+        font-size: 0.5em;
       }
     </style>
   </head>
   <body>
-    <h2><span id="area"></span>の天気</h2>
-    <span id="date"></span>
-    <img id="wImg">
+    <div class="weather">
+      <div class="area">
+        <span id="area"></span><br>
+        <span id="NSArea"></span>
+      </div>
+      <div>
+        <div class="dayWether">
+          <span id="today-day"></span>
+          <img  id="today-wImg">
+          <div class="tmp">
+            <span id="today-max"></span>
+            <span id="today-min"></span>
+          </div>
+        </div>
+        <div class="dayWether">
+          <span id="tomorrow-day"></span>
+          <img  id="tomorrow-wImg">
+          <div class="tmp">
+            <span id="tomorrow-max"></span><br>
+            <span id="tomorrow-min"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <script>
       var weather = JSON.parse(<?= loadWeather() ?>);
-      document.getElementById("area").innerHTML = weather.area;
-      document.getElementById("date").innerHTML = weather.date;
-      document.getElementById("wImg").src       = weather.img;
+      
+      document.getElementById("area").innerHTML = weather.area.name;
+      document.getElementById("NSArea").innerHTML = weather.area.NSArea;
+      
+      function writeWeather(dayStr,dayWeather){
+        document.getElementById(dayStr + "-day").innerHTML  = dayWeather.day + "日";
+        document.getElementById(dayStr + "-wImg").src       = dayWeather.img;
+        if(dayWeather.tmp.min){
+          console.log(dayStr + "-max");
+          document.getElementById(dayStr + "-max").innerHTML = "最高" + dayWeather.tmp.max + "度";
+        }
+        if(dayWeather.tmp.min){
+          console.log(dayWeather.tmp.min);
+          document.getElementById(dayStr + "-min").innerHTML = "最低" + dayWeather.tmp.min + "度";
+        }
+      }
+      writeWeather("today",weather.today);
+      writeWeather("tomorrow",weather.tomorrow);
     </script>
   </body>
 </html>
-
-

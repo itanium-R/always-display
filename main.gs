@@ -1,6 +1,9 @@
 function loadWeather() {
-  var area = {"name" : "京都",
-              "code" : 333};
+  var area = {
+    "name"   : "京都",
+    "code"   : 333,
+    "NSArea" : "南部"  
+  };
   var url =  "https://www.jma.go.jp/jp/yoho/"+area.code+".html";
   var fetchOpt = {
     "muteHttpExceptions": true
@@ -9,23 +12,64 @@ function loadWeather() {
   var html = response.getContentText('UTF-8');
   
 
-  var regexp1  = /<table class=\"forecast\" id=\"forecasttablefont\">([\s\S]*?)<\/table>/;
-  var forecast = html.match(regexp1)[0];
-  var regexp2  = /<th class=\"weather\">([\s\S]*?)<\/th>/;
-  var weather  = forecast.match(regexp2)[0];
-  var regexp3  = /今日([\s\S]*?)日/;
-  var date     = forecast.match(regexp3)[0];
-  var regexp4  = /src=\"([\s\S]*?)\"/;
-  var wImg     = "https://www.jma.go.jp/jp/yoho/" + weather.match(regexp4)[0].slice(5).replace('"','');
+  var regexp,forecast,weather,
+      w={tod:[],
+         tom:[]
+         };
+  if(area.NSArea="南部"){
+    regexp     = /南部([\s\S]*?)<div class=\"fortemplete\">/;
+  }else{
+    regexp     = /北部([\s\S]*?)<div class=\"fortemplete\">/;
+  }
+  forecast   = html.match(regexp)[0];
+  regexp     = /<th class=\"weather\">([\s\S]*?)<th class=\"weather\">/;
+  w.tod.html = forecast.match(regexp)[0];
+  regexp     = /明日([\s\S]*?)<th class=\"weather\">/;
+  w.tom.html = forecast.match(regexp)[0];
+    
+  getdayWeather(w.tod);
+  getdayWeather(w.tom);
   
-  Logger.log(date);
-  var wJson    = {"area" : area.name,
-                  "date" : date,
-                  "img"  : wImg
-                  };
-  
+  var wJson    = {
+    "area" : area,
+    "today":{
+      "day" : w.tod.day,
+      "img"  : w.tod.img,
+      "tmp"  : {
+        "max" : w.tod.tmax,
+        "min" : w.tod.tmin
+      }
+    },
+    "tomorrow":{
+      "day" : w.tom.day,
+      "img"  : w.tom.img,
+      "tmp"  : {
+        "max" : w.tom.tmax,
+        "min" : w.tom.tmin
+      }
+    }
+  };
   
   wJson=JSON.stringify(wJson);
-  Logger.log(wJson);
+  // Logger.log(wJson);
   return wJson;
+}
+
+function getdayWeather(day){
+  var regexp     = /src=\"([\s\S]*?)\"/;
+  day.img  = "https://www.jma.go.jp/jp/yoho/" + day.html.match(regexp)[0].slice(5).replace('"','');
+  regexp     = /(今|明)(日|朝|夜)([\s\S]*?)日/;
+  day.day = day.html.match(regexp)[3];
+  regexp     = /<td class=\"min\">([\s\S]*?)度/;
+  try{
+    day.tmin = day.html.match(regexp)[1];
+  }catch(e){
+    day.tmin = null;
+  }
+  regexp     = /<td class=\"max\">([\s\S]*?)度/;
+  try{
+    day.tmax = day.html.match(regexp)[1];
+  }catch(e){
+    day.tmax = null;
+  }
 }
