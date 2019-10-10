@@ -13,12 +13,14 @@
         padding:   0;
         font-family: 'Noto Sans JP';
         text-align:  center;
-        font-size:   8.5vw;
+        font-size:   8.2vw;
         background:  #235;
         color:       #FFF;
+        overflow:    hidden;
       }      
       img{
-        width:3em;
+        width:  3.2em;
+        height: 1.5em;
         filter: drop-shadow(0em 0em 0.2em #FFF);
       }
       p{
@@ -26,12 +28,15 @@
         padding: 0;
       }
       div.area{
-        font-weight: 700;
-        margin-right:1em;
+        font-weight:  700;
+        margin-right: 1em;
+        width:        2em;
+        overflow:  hidden;
       }
       span[id$="day"]{
-        width:2.5em;
-        text-align:right;
+        width:      2.5em;
+        text-align: right;
+        overflow:  hidden;
       }
       span[id$="max"]{
         font-weight: 600;
@@ -53,12 +58,13 @@
       .tmp{
         font-size: 0.5em;
       }
+      
     </style>
   </head>
   <body>
     <div class="weather">
       <div class="area">
-        <span id="area"></span><br>
+        <span id="area"></span>
         <span id="NSArea"></span>
       </div>
       <div>
@@ -66,7 +72,7 @@
           <span id="today-day"></span>
           <img  id="today-wImg">
           <div class="tmp">
-            <span id="today-max"></span>
+            <span id="today-max"></span><br>
             <span id="today-min"></span>
           </div>
         </div>
@@ -81,6 +87,7 @@
       </div>
     </div>
     
+    
     <script>
       var weather = JSON.parse(<?= loadWeather() ?>);
       
@@ -90,7 +97,7 @@
       function writeWeather(dayStr,dayWeather){
         document.getElementById(dayStr + "-day").innerHTML  = dayWeather.day + "日";
         document.getElementById(dayStr + "-wImg").src       = dayWeather.img;
-        if(dayWeather.tmp.min){
+        if(dayWeather.tmp.max){
           console.log(dayStr + "-max");
           document.getElementById(dayStr + "-max").innerHTML = "最高" + dayWeather.tmp.max + "度";
         }

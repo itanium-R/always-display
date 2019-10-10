@@ -4,7 +4,7 @@ function loadWeather() {
     "code"   : 333,
     "NSArea" : "南部"  
   };
-  var url =  "https://www.jma.go.jp/jp/yoho/"+area.code+".html";
+  var url =  "https://www.jma.go.jp/jp/yoho/" + area.code + ".html";
   var fetchOpt = {
     "muteHttpExceptions": true
   };
@@ -13,10 +13,11 @@ function loadWeather() {
   
 
   var regexp,forecast,weather,
-      w={tod:[],
-         tom:[]
-         };
-  if(area.NSArea="南部"){
+      w={
+        tod:[],
+        tom:[]
+      };
+  if(area.NSArea == "南部"){
     regexp     = /南部([\s\S]*?)<div class=\"fortemplete\">/;
   }else{
     regexp     = /北部([\s\S]*?)<div class=\"fortemplete\">/;
@@ -51,7 +52,7 @@ function loadWeather() {
   };
   
   wJson=JSON.stringify(wJson);
-  // Logger.log(wJson);
+  Logger.log(wJson);
   return wJson;
 }
 
@@ -62,13 +63,13 @@ function getdayWeather(day){
   day.day = day.html.match(regexp)[3];
   regexp     = /<td class=\"min\">([\s\S]*?)度/;
   try{
-    day.tmin = day.html.match(regexp)[1];
+    day.tmin = parseInt(day.html.match(regexp)[1], 10);
   }catch(e){
     day.tmin = null;
   }
   regexp     = /<td class=\"max\">([\s\S]*?)度/;
   try{
-    day.tmax = day.html.match(regexp)[1];
+    day.tmax = parseInt(day.html.match(regexp)[1], 10);
   }catch(e){
     day.tmax = null;
   }
