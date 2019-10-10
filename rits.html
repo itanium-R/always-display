@@ -5,6 +5,7 @@
     <?!= HtmlService.createTemplateFromFile("style").evaluate().getContent() ?>
   </head>
   <body>
+    <div class="v-space15">　</div>  
     
     <div class="weather">
       <div class="area">
@@ -30,14 +31,9 @@
         </div>
       </div>
     </div>
-    
-    <div class="marquee">
-      <p id="trainDelay"></p>
-    </div>
-    
+        
     <script>
-      var weather = JSON.parse(<?= loadWeather() ?>);
-      var JRWDly  = <?= loadJRWestDelay() ?>;
+      var weather = JSON.parse(<?= loadWeather(334) ?>);
       
       document.getElementById("area").innerHTML = weather.area.name;
       document.getElementById("NSArea").innerHTML = weather.area.NSArea;
@@ -54,18 +50,6 @@
       }
       writeWeather("today",weather.today);
       writeWeather("tomorrow",weather.tomorrow);
-      
-      var trainDelay = document.getElementById("trainDelay");
-      trainDelay.innerHTML = JRWDly;
-      
-      trainDelayLen = trainDelay.innerHTML.length;
-      
-      if(trainDelayLen <= 12){
-        trainDelay.innerHTML += "　　　　　　　　　　　　"; //スペース*12
-        trainDelayLen        += 12; 
-      }
-      
-      trainDelay.style.animationDuration = (trainDelayLen/3)+ "s";
       
     </script>
     

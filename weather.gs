@@ -1,9 +1,6 @@
-function loadWeather() {
-  var area = {
-    "name"   : "京都",
-    "code"   : 333,
-    "NSArea" : "南部"  
-  };
+function loadWeather(areaCode,NSArea) {
+  var area = getArea(areaCode);
+  area.NSArea = (NSArea) ?  NSArea : "南部"; 
   var url =  "https://www.jma.go.jp/jp/yoho/" + area.code + ".html";
   var fetchOpt = {
     "muteHttpExceptions": true
@@ -11,7 +8,6 @@ function loadWeather() {
   var response = UrlFetchApp.fetch(url,fetchOpt);
   var html = response.getContentText('UTF-8');
   
-
   var regexp,forecast,weather,
       w={
         tod:[],
@@ -20,7 +16,8 @@ function loadWeather() {
   if(area.NSArea == "南部"){
     regexp     = /南部([\s\S]*?)<div class=\"fortemplete\">/;
   }else{
-    regexp     = /北部([\s\S]*?)<div class=\"fortemplete\">/;
+    area.NSArea = "北部";
+    regexp      = /北部([\s\S]*?)<div class=\"fortemplete\">/;
   }
   forecast   = html.match(regexp)[0];
   regexp     = /<th class=\"weather\">([\s\S]*?)<th class=\"weather\">/;
@@ -28,8 +25,8 @@ function loadWeather() {
   regexp     = /明日([\s\S]*?)<th class=\"weather\">/;
   w.tom.html = forecast.match(regexp)[0];
     
-  getdayWeather(w.tod);
-  getdayWeather(w.tom);
+  getDayWeather(w.tod);
+  getDayWeather(w.tom);
   
   var wJson    = {
     "area" : area,
@@ -56,7 +53,7 @@ function loadWeather() {
   return wJson;
 }
 
-function getdayWeather(day){
+function getDayWeather(day){
   var regexp     = /src=\"([\s\S]*?)\"/;
   day.img  = "https://www.jma.go.jp/jp/yoho/" + day.html.match(regexp)[0].slice(5).replace('"','');
   regexp     = /(今|明)(日|朝|夜)([\s\S]*?)日/;
@@ -73,4 +70,21 @@ function getdayWeather(day){
   }catch(e){
     day.tmax = null;
   }
+}
+
+function getArea(areaCode){
+  
+  var area = [
+    {
+      "name"   : "京都",
+      "code"   : 333,
+    },
+    {
+      "name"   : "滋賀",
+      "code"   : 334,
+    }
+  ];
+  if(areaCode == area[1].code)return area[1];
+  
+  return area[0];
 }
