@@ -6,14 +6,19 @@ function loadJRWestDelay() {
   var response = UrlFetchApp.fetch(url,fetchOpt);
   var html = response.getContentText('Shift_JIS');
   
-  var regexp, delay="";
-  regexp = /<div class='tab-inner'>([\s\S]*?)<\/div><!--.tab-inner-->/;
-  html   = html.match(regexp)[1];
-  regexp = /<div class='jisyo_contents'>([\s\S]*?)<\/div><!-- .jisyo_contents-->/;
-  delay  = (html.match(regexp)[1]).replace(/\n/g,"").replace(/<([\s\S]*?)>|　|※([\s\S]*?)。/g,"").replace(/	/g," ");
-  
-  //delay  = html.match(regexp)[1].replace("】 ","で、").replace("【","").replace("","の影響により、");
-  //if(delay.slice(-2) == "遅れ") delay += "が発生しています。";
+  var regexp, delay = "";
+  try{
+    regexp = /<div class='tab-inner'>([\s\S]*?)<\/div><!--#syosai_n-->/;
+    html   = html.match(regexp)[1];
+    var jishoList = html.split("<div class='jisyo'>");
+    regexp = /<div class='jisyo_contents'>([\s\S]*?)<\/div><!-- .jisyo_contents-->/;
+    for(var i = 1;i <= jishoList.length;i++){
+      delay += (jishoList[i].match(regexp)[1]);
+    }
+  }catch(e){
+    Logger.log(e);
+  }  
+  delay = delay.replace(/\n/g,"").replace(/<([\s\S]*?)>|　|※([\s\S]*?)。/g,"").replace(/	/g," ");
   Logger.log(delay);
   return delay;
 }
