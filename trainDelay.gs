@@ -19,6 +19,7 @@ function loadJRWestDelay() {
     Logger.log(e);
   }  
   delay = delay.replace(/\n/g,"").replace(/<([\s\S]*?)>|　|※([\s\S]*?)。/g,"").replace(/	/g," ");
+  if(delay == "") delay = "列車の遅れなどの情報はありません。";
   Logger.log(delay);
   return delay;
 }

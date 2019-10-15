@@ -33,7 +33,7 @@
     </div>
         
     <script>
-      var weather = JSON.parse(<?= loadWeather(334) ?>);
+      var weather = JSON.parse(<?= loadWeather(areaCode,NS) ?>);
       
       document.getElementById("area").innerHTML = weather.area.name;
       document.getElementById("NSArea").innerHTML = weather.area.NSArea;

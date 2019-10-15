@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= HtmlService.createTemplateFromFile("style").evaluate().getContent() ?>
+    <script type="text/javascript">
+    
+    </script>
+  </head>
+  <body>
+    <div id="busTime" class="bus">
+    <table>
+      <thead>
+        <tr>
+          <td colspan="3" class="tableTitle">バス　立命館大学停留所 発車標</td>
+        </tr>
+        <tr>
+          <td>路線</td> 
+          <td>時刻</td> 
+          <td>行先</td>     
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="bus in busList">
+          <td>{{ bus.route }}</td>
+          <td>{{ bus.time  }}</td>
+          <td>{{ bus.destn }}</td>        
+        </tr>
+      </tbody>
+    </table>   
+    </div>
+    
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+    <script><!--
+      const vm = new Vue({
+        el: '#busTime',
+        data: {
+          busList:　JSON.parse(<?= loadBusTime() ?>)
+        },
+        methods: {
+          load: function(){
+          },
+        },
+        mounted: function(){
+          //this.load();
+        },
+      });
+    --></script>
+
+</html>
+
+

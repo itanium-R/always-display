@@ -13,6 +13,8 @@ function loadWeather(areaCode,NSArea) {
         tod:[],
         tom:[]
       };
+  regexp     = /<th colspan="2" class="th-area">([\s\S]*?)<div class=\"fortemplete\">/;
+  html = html.match(regexp)[0];
   if(area.NSArea == "南部"){
     regexp     = /南部([\s\S]*?)<div class=\"fortemplete\">/;
   }else{
@@ -20,6 +22,7 @@ function loadWeather(areaCode,NSArea) {
     regexp      = /北部([\s\S]*?)<div class=\"fortemplete\">/;
   }
   forecast   = html.match(regexp)[0];
+  Logger.log(forecast);
   regexp     = /<th class=\"weather\">([\s\S]*?)<th class=\"weather\">/;
   w.tod.html = forecast.match(regexp)[0];
   regexp     = /明日([\s\S]*?)<th class=\"weather\">/;
@@ -87,4 +90,8 @@ function getArea(areaCode){
   if(areaCode == area[1].code)return area[1];
   
   return area[0];
+}
+
+function test(){
+  loadWeather(334,"北部");
 }
