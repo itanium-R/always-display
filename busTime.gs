@@ -6,20 +6,20 @@ function loadBusTime(){
   var response = UrlFetchApp.fetch(url,fetchOpt);
   var html = response.getContentText('UTF-8');
   var regexp, bus="";
-  regexp = /\/maps.gstatic.com\/mapfiles\/transit\/iw2\/b\/bus2.png([\s\S]*?)〒525-0058 滋賀県草津市野路東１丁目１/;
+  regexp = /null,null,null,null,null,null,null,1,\["立命館大学",\[\[null,"バス",([\s\S]*?)〒525-0058 滋賀県草津市野路東１丁目１/;
   bus=(html.match(regexp)[1]);
-  var busList = bus.split('maps.gstatic.com\/mapfiles\/transit\/iw2\/b\/bus2.png');
-  regexp = /,\[5,\["([\s\S]*?)",1,"#ffffff","#000000"\]([\s\S]*?),\[null,\[\["([\s\S]*?)",null,null,([\s\S]*?),"Asia\/Tokyo","([\s\S]*?)",/;
-  
+  var busList = bus.split(',null,null,16777215,2]');
+  regexp = /\[null,\[\["([\s\S]*?)",null,null,([\s\S]*?),"Asia\/Tokyo","([\s\S]*?)",([\s\S]*?)\[5,\["([\s\S]*?)",1,"#ffffff","#000000"\]/; 
   var busJson   = []; 
   for(var i=0;i<7;i++){
     try{
-    var busRecord = {
-      "route": busList[i].match(regexp)[1],
-      "destn": busList[i].match(regexp)[3],
-      "time":  busList[i].match(regexp)[5]
-    }
-    busJson.push(busRecord);
+      var busRegexped = busList[i].match(regexp);
+      var busRecord = {
+        "destn": busRegexped[1],
+        "time":  busRegexped[3],
+        "route": busRegexped[5]
+      }
+      busJson.push(busRecord);
     }catch(e){
       break;
     }
