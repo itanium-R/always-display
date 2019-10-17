@@ -9,7 +9,7 @@ function loadBusTime(){
   regexp = /null,null,null,null,null,null,null,1,\["立命館大学",\[\[null,"バス",([\s\S]*?)〒525-0058 滋賀県草津市野路東１丁目１/;
   bus=(html.match(regexp)[1]);
   var busList = bus.split(',null,null,16777215,2]');
-  regexp = /\[null,\[\["([\s\S]*?)",null,null,([\s\S]*?),"Asia\/Tokyo","([\s\S]*?)",([\s\S]*?)\[5,\["([\s\S]*?)",1,"#ffffff","#000000"\]/; 
+  regexp = /\[null,\[\["([\s\S]*?)行",null,null,([\s\S]*?),"Asia\/Tokyo","([\s\S]*?)",([\s\S]*?)\[5,\["([\s\S]*?)",1,"#ffffff","#000000"\]/; 
   var busJson   = []; 
   for(var i=0;i<7;i++){
     try{
