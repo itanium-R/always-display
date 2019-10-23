@@ -38,6 +38,34 @@ function doGet(e) {
       .setContent(loadWeather(areaCode,NS));
     }
     
+    if(mode == "json_jrwd"){
+      var json = JSON.stringify({"JRWestDelay":loadJRWestDelay()});
+      return ContentService.createTextOutput()
+      .setMimeType(ContentService.MimeType.JSON)
+      .setContent(json);
+    }
+
+    if(mode == "json_test"){
+      return ContentService.createTextOutput()
+      .setMimeType(ContentService.MimeType.JSON)
+      .setContent('{"msg":"これはテストメッセージです"}');
+    }
+    
+    if(mode == "json_preset"){
+      var preset     = e.parameter["preset"];
+
+      var properties = PropertiesService.getScriptProperties();
+      var presetJson = properties.getProperty(preset);
+      
+      if(presetJson == null){
+        presetJson = '{"error":"not found"}';
+      }
+      
+      return ContentService.createTextOutput()
+      .setMimeType(ContentService.MimeType.JSON)
+      .setContent(presetJson);
+    }
+    
     return HtmlService.createTemplateFromFile("index").evaluate()
     .setTitle('Otenki')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1')
