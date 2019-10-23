@@ -32,35 +32,43 @@ function scrapeBusTime(){
   return busJson;
 }
 
-function loadBusTime(){
+function loadBusTime(preventsRedo){
   var properties = PropertiesService.getScriptProperties();
   var busList = JSON.parse(properties.getProperty("busJson"));
   var newDate = new Date();
   var index = 0;
   var now = (newDate.getHours() * 60) + newDate.getMinutes();
+  if(now < 4 * 60) time += 24 * 60; // 0~3時は24~27時として扱う
   Logger.log(now);
   for each(bus in busList){
-    var time = (bus.time.slice(0,2)-0) * 60;
-    if(time <= 3*60) time += 24 * 60; // 0~3時は24~27時として扱う
+    var time = (bus.time.slice(0,bus.time.length-3)-0) * 60;
+    if(time <= 3 * 60) time += 24 * 60; // 0~3時は24~27時として扱う
     time    += (bus.time.slice( -2)-0);
-    if(time > now) break;
-    index += 1;
+    Logger.log(time + "?" +now);
+    if(time > now) break;               // 過去の時刻でないものをみつけたらbreak
+    if(time < (now - (12 * 60))) break; // 12時間以上前なら翌日分と判定（scrape関数を6時間間隔で実行すること）
+    index += 1;                         // 出発後の便は消込
   }
+  Logger.log(index);
   if(index > 0){
     for(var i = 0;i < index;i++) busList.shift();
     properties.setProperty("busJson", JSON.stringify(busList));  
   }
-  if(busList.length < 7){
-    scrapeBusTime();
-    return loadBusTime();
+  if(busList.length < 7 && !preventsRedo){
+    try{
+      scrapeBusTime();
+      return loadBusTime(true);
+    }catch(e){
+      Logger.log(e);
+    }
   }
-  while(busList.length > 7) busList.pop();
+  while(busList.length > 7) busList.pop(); // 7件渡す
   busList = JSON.stringify(busList);
   Logger.log(busList);
   return busList;
 }
 
-function checkBusNum(){
+function checkBusLen(){
   var properties = PropertiesService.getScriptProperties();
   var busList = JSON.parse(properties.getProperty("busJson"));
   Logger.log(busList.length);
