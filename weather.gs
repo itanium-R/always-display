@@ -1,12 +1,13 @@
 function loadWeather(areaCode,NSArea) {
-  var area = getArea(areaCode);
-  area.NSArea = (NSArea) ?  NSArea : "南部"; 
-  var url =  "https://www.jma.go.jp/jp/yoho/" + area.code + ".html";
+  var areaCode = areaCode || 333;
+  var url =  "https://www.jma.go.jp/jp/yoho/" + areaCode + ".html";
   var fetchOpt = {
     "muteHttpExceptions": true
   };
   var response = UrlFetchApp.fetch(url,fetchOpt);
-  var html = response.getContentText('UTF-8');
+  var html  = response.getContentText('UTF-8');
+  var area  = getAreaName(html);
+  area.code = areaCode;
   
   var regexp,forecast,weather,
       w={
@@ -15,11 +16,11 @@ function loadWeather(areaCode,NSArea) {
       };
   regexp     = /<th colspan="2" class="th-area">([\s\S]*?)<div class=\"fortemplete\">/;
   html = html.match(regexp)[0];
-  if(area.NSArea == "南部"){
-    regexp     = /南部([\s\S]*?)<div class=\"fortemplete\">/;
-  }else{
-    area.NSArea = "北部";
+  if(area.NSArea == "北部"){
     regexp      = /北部([\s\S]*?)<div class=\"fortemplete\">/;
+  }else{
+    area.NSArea = "南部";
+    regexp      = /南部([\s\S]*?)<div class=\"fortemplete\">/;
   }
   forecast   = html.match(regexp)[0];
   Logger.log(forecast);
@@ -75,21 +76,20 @@ function getDayWeather(day){
   }
 }
 
-function getArea(areaCode){
-  
-  var area = [
-    {
+function getAreaName(html){
+  try{
+    var regexp = /<title>([\s\S]*?)：([\s\S]*?)(都|道|府|県)/;
+    var area = {
+      "name"   : html.match(regexp)[2],
+    };
+  }catch(e){
+    var area = {
       "name"   : "京都",
       "code"   : 333,
-    },
-    {
-      "name"   : "滋賀",
-      "code"   : 334,
-    }
-  ];
-  if(areaCode == area[1].code)return area[1];
-  
-  return area[0];
+      "error"  : e,
+    };
+  }
+  return area;
 }
 
 function test(){
