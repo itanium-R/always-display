@@ -78,10 +78,12 @@ function getDayWeather(day){
 
 function getAreaName(html){
   try{
-    var regexp = /<title>([\s\S]*?)：([\s\S]*?)(都|道|府|県)/;
+    var regexp = /<title>([\s\S]*?)： ([\s\S]*?)(都|道|府|県)/;
     var area = {
       "name"   : html.match(regexp)[2],
     };
+    Logger.log(area.name);
+    if(area.name == "京") area.name = "京都";
   }catch(e){
     var area = {
       "name"   : "京都",
