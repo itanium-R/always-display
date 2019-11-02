@@ -45,10 +45,21 @@ function doGet(e) {
       .setContent(json);
     }
 
+    if(mode == "json_jrwdtest"){
+      var properties = PropertiesService.getScriptProperties();
+      var jrwdJson = properties.getProperty("jrwdTestJson");
+      var json = JSON.stringify({"JRWestDelay":jrwdJson});
+      return ContentService.createTextOutput()
+      .setMimeType(ContentService.MimeType.JSON)
+      .setContent(json);
+    }
+    
     if(mode == "json_test"){
       return ContentService.createTextOutput()
       .setMimeType(ContentService.MimeType.JSON)
-      .setContent('{"msg":"これはテストメッセージです"}');
+      .setContent('{"msg":"これはテストメッセージです。初期設定の天気予報の情報源は気象庁ホームページです。' + 
+                  '右下の時計をクリックし、tickerの設定より文字列を格納した' +
+                  'JSONソースのURLとフィールド名を入力すると、任意の文字列を流せます。"}');
     }
     
     if(mode == "json_preset"){
