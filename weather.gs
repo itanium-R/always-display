@@ -1,5 +1,5 @@
 function loadWeather(areaCode,NSArea) {
-  var areaCode = areaCode || 333;
+  var areaCode = parseInt(areaCode) || 333;
   var url =  "https://www.jma.go.jp/jp/yoho/" + areaCode + ".html";
   var fetchOpt = {
     "muteHttpExceptions": true
