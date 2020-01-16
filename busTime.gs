@@ -8,8 +8,8 @@ function scrapeBusTime(){
   var regexp, bus="";
   regexp = /null,null,null,null,null,null,null,1,\["立命館大学",\[\[null,"バス",([\s\S]*?)〒525-0058 滋賀県草津市野路東１丁目１/;
   bus=(html.match(regexp)[1]);
-  var busList = bus.split(',null,null,16777215,2]');
-  regexp = /\[null,\[\["([\s\S]*?)行",null,null,([\s\S]*?),"Asia\/Tokyo","([\s\S]*?)",([\s\S]*?)\[5,\["([\s\S]*?)",1,"#ffffff","#000000"\]/; 
+  var busList = bus.split(',null,null,null,2]');
+  regexp = /\[null,\[\["([\s\S]*?)行",null,null,([\s\S]*?),"Asia\/Tokyo","([\s\S]*?)",([\s\S]*?),\[5,\["([\s\S]*?)",1,"#ffffff"\]/; 
   var busJson   = []; 
   for(var i=0;i<25;i++){
     try{
@@ -73,3 +73,4 @@ function checkBusLen(){
   var busList = JSON.parse(properties.getProperty("busJson"));
   Logger.log(busList.length);
 }
+
