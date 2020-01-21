@@ -41,10 +41,10 @@
       function writeWeather(dayStr,dayWeather){
         document.getElementById(dayStr + "-day").innerHTML  = dayWeather.day + "日";
         document.getElementById(dayStr + "-wImg").src       = dayWeather.img;
-        if(dayWeather.tmp.max){
+        if(dayWeather.tmp.max === 0 || dayWeather.tmp.max){
           document.getElementById(dayStr + "-max").innerHTML = "最高" + dayWeather.tmp.max + "度";
         }
-        if(dayWeather.tmp.min){
+        if(dayWeather.tmp.min === 0 || dayWeather.tmp.min){
           document.getElementById(dayStr + "-min").innerHTML = "最低" + dayWeather.tmp.min + "度";
         }
       }
