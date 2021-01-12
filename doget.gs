@@ -39,7 +39,7 @@ function doGet(e) {
     }
     
     if(mode == "json_jrwd"){
-      var json = JSON.stringify({"JRWestDelay":loadJRWestDelay()});
+      var json = loadJRWestDelay();
       return ContentService.createTextOutput()
       .setMimeType(ContentService.MimeType.JSON)
       .setContent(json);

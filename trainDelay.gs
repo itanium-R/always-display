@@ -1,3 +1,7 @@
+var DEF_G_BGCOLOR = "#2040aa";
+var DEF_Y_BGCOLOR = "#ffd900";
+var DEF_R_BGCOLOR = "#a10000";
+
 function loadJRWestDelay() {
   var url =  "https://trafficinfo.westjr.co.jp/kinki.html";
   var fetchOpt = {
@@ -23,7 +27,21 @@ function loadJRWestDelay() {
     Logger.log(e);
   }  
   delay = delay.replace(/\n/g,"　");
-  if(delay == "") delay = "列車の遅れなどの情報はありません。";
+  
+  var color = DEF_G_BGCOLOR;
+  
+  if(delay == ""){
+    delay = "列車の遅れなどの情報はありません。";
+  }else{
+    if(delay.indexOf("運転を見合わせています") >= 0){
+      color = DEF_R_BGCOLOR;
+    }else{
+      color = DEF_Y_BGCOLOR;
+    }
+  }
+
+  Logger.log(color)
   Logger.log(delay);
-  return delay;
+
+  return JSON.stringify({"JRWestDelay": delay, "bgcolor": color});
 }
