@@ -14,7 +14,7 @@ function loadJRWestDelay() {
     //regexp = /<div class='jisyo_contents'>([\s\S]*?)<\/div><!-- .jisyo_contents-->/;
     regexp = /<p class='gaiyo'>([\s\S]*?)<\/p>/;
     for(var i = 1;i <= jishoList.length;i++){
-      Logger.log(jishoList[i]);
+      // Logger.log(jishoList[i]);
       delay += (jishoList[i].match(regexp)[1])
                   .replace(/<([\s\S]*?)>|　|	|※([\s\S]*?)。|振替([\s\S]*?)バイト）/g,"　")
                   .replace(/ {2,}|　{2,}/g,"　") + "　　　　　";
