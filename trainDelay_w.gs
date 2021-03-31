@@ -1,5 +1,5 @@
 var DEF_G_BGCOLOR = "#2040aa";
-var DEF_Y_BGCOLOR = "#ffd900";
+var DEF_Y_BGCOLOR = "#e68e00";
 var DEF_R_BGCOLOR = "#a10000";
 
 function loadJRWestDelay() {
